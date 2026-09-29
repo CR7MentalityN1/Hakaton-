@@ -1,0 +1,66 @@
+{
+  "timestamp": "2026-09-27T20:07:09.116649+00:00",
+  "api": "http://127.0.0.1:8000",
+  "independent_pkce_sessions": 50,
+  "rounds": 5,
+  "warmup": "one authenticated request per session",
+  "health": {
+    "status": "ok",
+    "database": "ok",
+    "redis": "degraded",
+    "auth": "keycloak"
+  },
+  "concurrent_users": {
+    "requests": 250,
+    "errors": 0,
+    "statuses": {
+      "200": 250
+    },
+    "p50_ms": 591,
+    "p95_ms": 1036,
+    "max_ms": 1217
+  },
+  "by_endpoint": {
+    "/universities": {
+      "requests": 83,
+      "errors": 0,
+      "statuses": {
+        "200": 83
+      },
+      "p50_ms": 579,
+      "p95_ms": 942,
+      "max_ms": 1036
+    },
+    "/interactions": {
+      "requests": 84,
+      "errors": 0,
+      "statuses": {
+        "200": 84
+      },
+      "p50_ms": 520,
+      "p95_ms": 925,
+      "max_ms": 1042
+    },
+    "/dashboard": {
+      "requests": 83,
+      "errors": 0,
+      "statuses": {
+        "200": 83
+      },
+      "p50_ms": 777,
+      "p95_ms": 1115,
+      "max_ms": 1217
+    }
+  },
+  "reports_10": {
+    "requests": 10,
+    "errors": 0,
+    "statuses": {
+      "200": 10
+    },
+    "p50_ms": 370,
+    "p95_ms": 375,
+    "max_ms": 379
+  },
+  "interface_p95_under_1s": false
+}

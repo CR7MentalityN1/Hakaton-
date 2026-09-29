@@ -1,0 +1,9 @@
+{
+  "comment_ms": 196,
+  "transition_ms": 439,
+  "report_preview_ms": 238,
+  "full_page_reloads_during_edits": 0,
+  "upload": true,
+  "xlsx_download": true,
+  "excel_preview": true
+}

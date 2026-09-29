@@ -1,0 +1,37 @@
+name: CRM checks
+on: [push, pull_request]
+jobs:
+  checks:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-python@v5
+        with:
+          python-version: '3.12'
+      - uses: actions/setup-node@v4
+        with:
+          node-version: '24'
+          cache: npm
+      - run: pip install -r backend/requirements-dev.txt
+      - run: pytest backend/tests -q
+      - run: ruff check backend/app backend/alembic backend/tests
+      - run: npm ci
+      - run: npm test && npm run lint && npm run typecheck && npm run build
+      - run: docker compose config --quiet
+      - run: docker compose up --build --wait --wait-timeout 300
+      - run: npx playwright install --with-deps chromium
+      - run: node scripts/browser-smoke.mjs
+        env:
+          BROWSER_CHANNEL: chromium
+      - if: always()
+        run: docker compose logs --no-color > compose-ci.log
+      - if: always()
+        uses: actions/upload-artifact@v4
+        with:
+          name: verification-results
+          path: |
+            compose-ci.log
+            docs/browser-results.json
+            docs/screenshots/
+      - if: always()
+        run: docker compose down

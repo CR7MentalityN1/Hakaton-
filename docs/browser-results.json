@@ -1,0 +1,17 @@
+[
+  {
+    "role": "admin",
+    "login": true,
+    "errors": []
+  },
+  {
+    "role": "manager",
+    "login": true,
+    "errors": []
+  },
+  {
+    "role": "user",
+    "login": true,
+    "errors": []
+  }
+]

@@ -1,0 +1,20 @@
+{
+  "name": "it-school-crm",
+  "private": true,
+  "version": "2.0.0",
+  "workspaces": [
+    "frontend"
+  ],
+  "scripts": {
+    "dev": "npm run dev -w frontend",
+    "build": "npm run build -w frontend",
+    "test": "npm run test -w frontend",
+    "lint": "npm run lint -w frontend",
+    "typecheck": "npm run typecheck -w frontend",
+    "format": "prettier --write frontend/src docker/*.json"
+  },
+  "devDependencies": {
+    "@playwright/test": "1.58.2",
+    "prettier": "3.6.2"
+  }
+}

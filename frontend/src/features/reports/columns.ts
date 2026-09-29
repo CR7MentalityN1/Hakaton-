@@ -1,0 +1,17 @@
+export const columns: Record<string, string> = {
+  university: "ВУЗ",
+  direction: "ИТ-направление",
+  program: "ИТ-программа",
+  product: "ИТ-продукт",
+  stage: "Статус работы",
+  responsible: "Ответственный",
+  contract_number: "Номер договора",
+  license_end_date: "Срок лицензии",
+  vendor: "Вендор",
+  license_signed: "Лицензия подписана",
+  transfer_status: "Передача",
+  applications: "Заявки",
+  students: "Обучающиеся",
+  streams: "Потоки",
+  created_at: "Создано",
+};

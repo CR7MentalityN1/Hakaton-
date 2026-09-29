@@ -1,0 +1,112 @@
+name: it-school-crm
+services:
+  postgres:
+    image: postgres:17-alpine
+    environment:
+      POSTGRES_USER: crm
+      POSTGRES_PASSWORD: ${POSTGRES_PASSWORD:-crm-local-demo}
+      POSTGRES_DB: crm
+    volumes:
+      - postgres_data:/var/lib/postgresql/data
+      - ./docker/init.sql:/docker-entrypoint-initdb.d/01-keycloak.sql:ro
+    healthcheck:
+      test: [CMD-SHELL, "pg_isready -U crm -d crm"]
+      interval: 5s
+      timeout: 3s
+      retries: 20
+  redis:
+    image: redis:7-alpine
+    command: [redis-server, --appendonly, "yes"]
+    volumes:
+      - redis_data:/data
+    healthcheck:
+      test: [CMD, redis-cli, ping]
+      interval: 5s
+      timeout: 3s
+      retries: 20
+  keycloak:
+    image: quay.io/keycloak/keycloak:26.2.5
+    command: [start-dev, --import-realm]
+    environment:
+      KC_BOOTSTRAP_ADMIN_USERNAME: ${KC_ADMIN:-bootstrap-admin}
+      KC_BOOTSTRAP_ADMIN_PASSWORD: ${KC_ADMIN_PASSWORD:-change-me-local-demo}
+      KC_HEALTH_ENABLED: "true"
+      KC_HOSTNAME: http://localhost:${KEYCLOAK_PORT:-8080}
+      KC_HOSTNAME_BACKCHANNEL_DYNAMIC: "true"
+      KC_DB: postgres
+      KC_DB_URL: jdbc:postgresql://postgres:5432/crm
+      KC_DB_USERNAME: crm
+      KC_DB_PASSWORD: ${POSTGRES_PASSWORD:-crm-local-demo}
+      KC_DB_SCHEMA: keycloak
+    ports:
+      - "${KEYCLOAK_PORT:-8080}:8080"
+    volumes:
+      - ./docker/keycloak-realm.json:/opt/keycloak/data/import/realm.json:ro
+    depends_on:
+      postgres: { condition: service_healthy }
+    healthcheck:
+      test:
+        [
+          CMD-SHELL,
+          "bash -c 'exec 3<>/dev/tcp/localhost/9000; printf \"GET /health/ready HTTP/1.0\r\n\r\n\" >&3; read -r line <&3; [[ \"$$line\" == *\"200\"* ]]'",
+        ]
+      interval: 10s
+      timeout: 5s
+      retries: 30
+      start_period: 30s
+  backend:
+    build:
+      context: .
+      dockerfile: backend/Dockerfile
+    environment:
+      DATABASE_URL: postgresql+psycopg://crm:${POSTGRES_PASSWORD:-crm-local-demo}@postgres:5432/crm
+      REDIS_URL: redis://redis:6379/0
+      KEYCLOAK_ISSUER: http://localhost:${KEYCLOAK_PORT:-8080}/realms/rostelecom-it-school
+      KEYCLOAK_JWKS_URL: http://keycloak:8080/realms/rostelecom-it-school/protocol/openid-connect/certs
+      KEYCLOAK_AUDIENCE: crm-backend
+      CORS_ORIGINS: http://localhost:${FRONTEND_PORT:-3000}
+      DATA_DIR: /srv/data
+      MAX_UPLOAD_MB: ${MAX_UPLOAD_MB:-20}
+      SEED_DEMO: ${SEED_DEMO:-true}
+      INTEGRATION_MODE: ${INTEGRATION_MODE:-mock}
+      INTEGRATION_ALLOWED_HOSTS: ${INTEGRATION_ALLOWED_HOSTS:-}
+      LMS_API_URL: ${LMS_API_URL:-}
+      LMS_API_TOKEN: ${LMS_API_TOKEN:-}
+      WEBSITE_API_URL: ${WEBSITE_API_URL:-}
+      WEBSITE_API_TOKEN: ${WEBSITE_API_TOKEN:-}
+    volumes:
+      - uploads:/srv/data
+    ports:
+      - "${BACKEND_PORT:-8000}:8000"
+    depends_on:
+      postgres: { condition: service_healthy }
+      redis: { condition: service_healthy }
+      keycloak: { condition: service_healthy }
+    healthcheck:
+      test:
+        [
+          CMD,
+          python,
+          -c,
+          'import urllib.request; urllib.request.urlopen("http://localhost:8000/health")',
+        ]
+      interval: 10s
+      timeout: 5s
+      retries: 10
+  frontend:
+    build:
+      context: .
+      dockerfile: frontend/Dockerfile
+    ports:
+      - "${FRONTEND_PORT:-3000}:80"
+    depends_on:
+      backend: { condition: service_healthy }
+    healthcheck:
+      test: [CMD, wget, -q, --spider, http://127.0.0.1/]
+      interval: 10s
+      timeout: 3s
+      retries: 10
+volumes:
+  postgres_data:
+  redis_data:
+  uploads:

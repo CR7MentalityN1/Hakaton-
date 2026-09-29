@@ -1,0 +1,18 @@
+{
+  "environment": "Windows native PostgreSQL 17, Keycloak 26.2.5, Redis unavailable; loopback, demo dataset",
+  "timestamp": "2026-09-27T19:50:02.229Z",
+  "concurrent_50": {
+    "requests": 50,
+    "p50_ms": 631,
+    "p95_ms": 29965,
+    "max_ms": 30022,
+    "errors": 0
+  },
+  "reports_10": {
+    "requests": 10,
+    "p50_ms": 337,
+    "p95_ms": 349,
+    "max_ms": 349,
+    "errors": 0
+  }
+}

@@ -1,0 +1,171 @@
+{
+  "realm": "rostelecom-it-school",
+  "enabled": true,
+  "registrationAllowed": false,
+  "resetPasswordAllowed": false,
+  "sslRequired": "external",
+  "roles": {
+    "realm": [
+      {
+        "name": "user"
+      },
+      {
+        "name": "manager"
+      },
+      {
+        "name": "admin"
+      }
+    ]
+  },
+  "clients": [
+    {
+      "clientId": "crm-frontend",
+      "publicClient": true,
+      "standardFlowEnabled": true,
+      "directAccessGrantsEnabled": false,
+      "redirectUris": ["http://localhost:3000/*"],
+      "webOrigins": ["http://localhost:3000"],
+      "attributes": {
+        "pkce.code.challenge.method": "S256"
+      },
+      "protocolMappers": [
+        {
+          "name": "backend-audience",
+          "protocol": "openid-connect",
+          "protocolMapper": "oidc-audience-mapper",
+          "config": {
+            "included.client.audience": "crm-backend",
+            "access.token.claim": "true",
+            "id.token.claim": "false"
+          }
+        }
+      ]
+    },
+    {
+      "clientId": "crm-backend",
+      "bearerOnly": true,
+      "publicClient": false
+    }
+  ],
+  "users": [
+    {
+      "id": "00000000-0000-4000-8000-000000000001",
+      "username": "admin",
+      "enabled": true,
+      "emailVerified": true,
+      "email": "admin@example.org",
+      "firstName": "Анна",
+      "lastName": "Смирнова",
+      "realmRoles": ["admin"],
+      "credentials": [
+        {
+          "type": "password",
+          "value": "admin123",
+          "temporary": false
+        }
+      ]
+    },
+    {
+      "id": "00000000-0000-4000-8000-000000000002",
+      "username": "manager",
+      "enabled": true,
+      "emailVerified": true,
+      "email": "manager@example.org",
+      "firstName": "Михаил",
+      "lastName": "Волков",
+      "realmRoles": ["manager"],
+      "credentials": [
+        {
+          "type": "password",
+          "value": "manager123",
+          "temporary": false
+        }
+      ]
+    },
+    {
+      "id": "00000000-0000-4000-8000-000000000003",
+      "username": "user",
+      "enabled": true,
+      "emailVerified": true,
+      "email": "user@example.org",
+      "firstName": "Елена",
+      "lastName": "Соколова",
+      "realmRoles": ["user"],
+      "credentials": [
+        {
+          "type": "password",
+          "value": "user123",
+          "temporary": false
+        }
+      ]
+    },
+    {
+      "id": "00000000-0000-4000-8000-000000000004",
+      "username": "user2",
+      "enabled": true,
+      "emailVerified": true,
+      "email": "user2@example.org",
+      "firstName": "Александр",
+      "lastName": "Орлов",
+      "realmRoles": ["user"],
+      "credentials": [
+        {
+          "type": "password",
+          "value": "user2123",
+          "temporary": false
+        }
+      ]
+    },
+    {
+      "id": "00000000-0000-4000-8000-000000000005",
+      "username": "user3",
+      "enabled": true,
+      "emailVerified": true,
+      "email": "user3@example.org",
+      "firstName": "Мария",
+      "lastName": "Кузнецова",
+      "realmRoles": ["user"],
+      "credentials": [
+        {
+          "type": "password",
+          "value": "user3123",
+          "temporary": false
+        }
+      ]
+    },
+    {
+      "id": "00000000-0000-4000-8000-000000000006",
+      "username": "user4",
+      "enabled": true,
+      "emailVerified": true,
+      "email": "user4@example.org",
+      "firstName": "Дмитрий",
+      "lastName": "Морозов",
+      "realmRoles": ["user"],
+      "credentials": [
+        {
+          "type": "password",
+          "value": "user4123",
+          "temporary": false
+        }
+      ]
+    },
+    {
+      "id": "00000000-0000-4000-8000-000000000007",
+      "username": "user5",
+      "enabled": true,
+      "emailVerified": true,
+      "email": "user5@example.org",
+      "firstName": "Ольга",
+      "lastName": "Новикова",
+      "realmRoles": ["user"],
+      "credentials": [
+        {
+          "type": "password",
+          "value": "user5123",
+          "temporary": false
+        }
+      ]
+    }
+  ]
+}

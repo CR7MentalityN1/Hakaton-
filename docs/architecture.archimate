@@ -1,0 +1,101 @@
+<?xml version='1.0' encoding='utf-8'?>
+<archimate:model xmlns:archimate="http://www.archimatetool.com/archimate" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" name="ИТ Школа CRM v2" id="model-crm-v2" version="5.0.0">
+  <folder name="Бизнес" id="folder-business" type="business">
+    <element xsi:type="archimate:BusinessRole" id="kam" name="КАМ" />
+    <element xsi:type="archimate:BusinessRole" id="manager" name="Руководитель" />
+    <element xsi:type="archimate:BusinessRole" id="admin" name="Администратор" />
+    <element xsi:type="archimate:BusinessProcess" id="process" name="Сотрудничество с ВУЗом" />
+  </folder>
+  <folder name="Приложения" id="folder-application" type="application">
+    <element xsi:type="archimate:ApplicationComponent" id="spa" name="React SPA" />
+    <element xsi:type="archimate:ApplicationComponent" id="api" name="FastAPI CRM" />
+    <element xsi:type="archimate:ApplicationComponent" id="kc" name="Keycloak OIDC" />
+    <element xsi:type="archimate:ApplicationFunction" id="reports" name="Формирование отчётов" />
+    <element xsi:type="archimate:ApplicationComponent" id="adapters" name="LMS / Website adapters" />
+    <element xsi:type="archimate:DataObject" id="data" name="University / Interaction / Workflow" />
+    <element xsi:type="archimate:DataObject" id="audit" name="AuditLog" />
+  </folder>
+  <folder name="Технологии" id="folder-technology" type="technology">
+    <element xsi:type="archimate:SystemSoftware" id="pg" name="PostgreSQL" />
+    <element xsi:type="archimate:SystemSoftware" id="redis" name="Redis" />
+    <element xsi:type="archimate:Artifact" id="storage" name="Files volume" />
+    <element xsi:type="archimate:Node" id="docker" name="Linux Docker host" />
+  </folder>
+  <folder name="Связи" id="folder-relations" type="relations">
+    <element xsi:type="archimate:ServingRelationship" id="relation-0" source="spa" target="kam" />
+    <element xsi:type="archimate:ServingRelationship" id="relation-1" source="spa" target="manager" />
+    <element xsi:type="archimate:ServingRelationship" id="relation-2" source="spa" target="admin" />
+    <element xsi:type="archimate:ServingRelationship" id="relation-3" source="api" target="spa" />
+    <element xsi:type="archimate:FlowRelationship" id="relation-4" source="spa" target="kc" />
+    <element xsi:type="archimate:AccessRelationship" id="relation-5" source="api" target="data" />
+    <element xsi:type="archimate:AccessRelationship" id="relation-6" source="api" target="audit" />
+    <element xsi:type="archimate:FlowRelationship" id="relation-7" source="api" target="adapters" />
+    <element xsi:type="archimate:CompositionRelationship" id="relation-8" source="api" target="reports" />
+    <element xsi:type="archimate:ServingRelationship" id="relation-9" source="pg" target="api" />
+    <element xsi:type="archimate:ServingRelationship" id="relation-10" source="redis" target="api" />
+    <element xsi:type="archimate:AccessRelationship" id="relation-11" source="api" target="storage" />
+    <element xsi:type="archimate:CompositionRelationship" id="relation-12" source="docker" target="pg" />
+  </folder>
+  <folder name="Представления" id="folder-diagrams" type="diagrams">
+    <element xsi:type="archimate:ArchimateDiagramModel" id="view-components" name="Функциональная и компонентная архитектура">
+      <child xsi:type="archimate:DiagramObject" id="view-kam" archimateElement="kam" targetConnections="connection-0">
+        <bounds x="30" y="30" width="230" height="90" />
+      </child>
+      <child xsi:type="archimate:DiagramObject" id="view-manager" archimateElement="manager" targetConnections="connection-1">
+        <bounds x="290" y="30" width="230" height="90" />
+      </child>
+      <child xsi:type="archimate:DiagramObject" id="view-admin" archimateElement="admin" targetConnections="connection-2">
+        <bounds x="550" y="30" width="230" height="90" />
+      </child>
+      <child xsi:type="archimate:DiagramObject" id="view-process" archimateElement="process">
+        <bounds x="30" y="155" width="230" height="90" />
+      </child>
+      <child xsi:type="archimate:DiagramObject" id="view-spa" archimateElement="spa" targetConnections="connection-3">
+        <bounds x="290" y="155" width="230" height="90" />
+        <sourceConnection xsi:type="archimate:Connection" id="connection-0" source="view-spa" target="view-kam" archimateRelationship="relation-0" />
+        <sourceConnection xsi:type="archimate:Connection" id="connection-1" source="view-spa" target="view-manager" archimateRelationship="relation-1" />
+        <sourceConnection xsi:type="archimate:Connection" id="connection-2" source="view-spa" target="view-admin" archimateRelationship="relation-2" />
+        <sourceConnection xsi:type="archimate:Connection" id="connection-4" source="view-spa" target="view-kc" archimateRelationship="relation-4" />
+      </child>
+      <child xsi:type="archimate:DiagramObject" id="view-api" archimateElement="api" targetConnections="connection-9 connection-10">
+        <bounds x="550" y="155" width="230" height="90" />
+        <sourceConnection xsi:type="archimate:Connection" id="connection-3" source="view-api" target="view-spa" archimateRelationship="relation-3" />
+        <sourceConnection xsi:type="archimate:Connection" id="connection-5" source="view-api" target="view-data" archimateRelationship="relation-5" />
+        <sourceConnection xsi:type="archimate:Connection" id="connection-6" source="view-api" target="view-audit" archimateRelationship="relation-6" />
+        <sourceConnection xsi:type="archimate:Connection" id="connection-7" source="view-api" target="view-adapters" archimateRelationship="relation-7" />
+        <sourceConnection xsi:type="archimate:Connection" id="connection-8" source="view-api" target="view-reports" archimateRelationship="relation-8" />
+        <sourceConnection xsi:type="archimate:Connection" id="connection-11" source="view-api" target="view-storage" archimateRelationship="relation-11" />
+      </child>
+      <child xsi:type="archimate:DiagramObject" id="view-kc" archimateElement="kc" targetConnections="connection-4">
+        <bounds x="30" y="280" width="230" height="90" />
+      </child>
+      <child xsi:type="archimate:DiagramObject" id="view-reports" archimateElement="reports" targetConnections="connection-8">
+        <bounds x="290" y="280" width="230" height="90" />
+      </child>
+      <child xsi:type="archimate:DiagramObject" id="view-adapters" archimateElement="adapters" targetConnections="connection-7">
+        <bounds x="550" y="280" width="230" height="90" />
+      </child>
+      <child xsi:type="archimate:DiagramObject" id="view-data" archimateElement="data" targetConnections="connection-5">
+        <bounds x="30" y="405" width="230" height="90" />
+      </child>
+      <child xsi:type="archimate:DiagramObject" id="view-audit" archimateElement="audit" targetConnections="connection-6">
+        <bounds x="290" y="405" width="230" height="90" />
+      </child>
+      <child xsi:type="archimate:DiagramObject" id="view-pg" archimateElement="pg" targetConnections="connection-12">
+        <bounds x="550" y="405" width="230" height="90" />
+        <sourceConnection xsi:type="archimate:Connection" id="connection-9" source="view-pg" target="view-api" archimateRelationship="relation-9" />
+      </child>
+      <child xsi:type="archimate:DiagramObject" id="view-redis" archimateElement="redis">
+        <bounds x="30" y="530" width="230" height="90" />
+        <sourceConnection xsi:type="archimate:Connection" id="connection-10" source="view-redis" target="view-api" archimateRelationship="relation-10" />
+      </child>
+      <child xsi:type="archimate:DiagramObject" id="view-storage" archimateElement="storage" targetConnections="connection-11">
+        <bounds x="290" y="530" width="230" height="90" />
+      </child>
+      <child xsi:type="archimate:DiagramObject" id="view-docker" archimateElement="docker">
+        <bounds x="550" y="530" width="230" height="90" />
+        <sourceConnection xsi:type="archimate:Connection" id="connection-12" source="view-docker" target="view-pg" archimateRelationship="relation-12" />
+      </child>
+    </element>
+  </folder>
+</archimate:model>
