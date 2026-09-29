@@ -6,6 +6,8 @@ data/
 __pycache__/
 .pytest_cache/
 .env
+.env.public
+.deployment/
 *.log
 test-results/
 .runtime/

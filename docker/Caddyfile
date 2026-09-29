@@ -1,0 +1,14 @@
+{$CRM_DOMAIN} {
+    encode zstd gzip
+    reverse_proxy frontend:80
+}
+
+{$AUTH_DOMAIN} {
+    @oidc path /realms/* /resources/* /.well-known/*
+    handle @oidc {
+        reverse_proxy keycloak:8080
+    }
+    handle {
+        respond "Not found" 404
+    }
+}

@@ -1,0 +1,48 @@
+# Use together with docker-compose.yml; requires Compose >= 2.24.4.
+name: it-school-crm-public
+services:
+  postgres:
+    restart: unless-stopped
+    environment:
+      POSTGRES_PASSWORD: ${POSTGRES_PASSWORD:?Run scripts/prepare_public.py first}
+  redis:
+    restart: unless-stopped
+  keycloak:
+    restart: unless-stopped
+    command: [start, --import-realm]
+    ports: !reset []
+    environment:
+      KC_HOSTNAME: https://${AUTH_DOMAIN:?Set AUTH_DOMAIN}
+      KC_HTTP_ENABLED: "true"
+      KC_PROXY_HEADERS: xforwarded
+      KC_BOOTSTRAP_ADMIN_PASSWORD: ${KC_ADMIN_PASSWORD:?Generate a unique password}
+    volumes:
+      - ./.deployment/keycloak-realm.json:/opt/keycloak/data/import/realm.json:ro
+  backend:
+    restart: unless-stopped
+    ports: !reset []
+    environment:
+      KEYCLOAK_ISSUER: https://${AUTH_DOMAIN:?Set AUTH_DOMAIN}/realms/rostelecom-it-school
+      CORS_ORIGINS: https://${CRM_DOMAIN:?Set CRM_DOMAIN}
+  frontend:
+    restart: unless-stopped
+    ports: !reset []
+  proxy:
+    image: caddy:2-alpine
+    restart: unless-stopped
+    environment:
+      CRM_DOMAIN: ${CRM_DOMAIN:?Set CRM_DOMAIN}
+      AUTH_DOMAIN: ${AUTH_DOMAIN:?Set AUTH_DOMAIN}
+    ports:
+      - "80:80"
+      - "443:443"
+    volumes:
+      - ./docker/Caddyfile:/etc/caddy/Caddyfile:ro
+      - caddy_data:/data
+      - caddy_config:/config
+    depends_on:
+      frontend: { condition: service_healthy }
+      keycloak: { condition: service_healthy }
+volumes:
+  caddy_data:
+  caddy_config:
