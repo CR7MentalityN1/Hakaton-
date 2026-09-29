@@ -1,0 +1,7 @@
+Slide 4 shape 125629218: text height 72.41504, box 64.8
+Slide 4 shape 1880041961: text height 72.41504, box 57.6
+Slide 6 shape 1875783976: text height 82.90504, box 72
+Slide 7 shape 2082633718: text height 124.27, box 108
+Slide 15 shape 1036787441: text height 221.26, box 187.0169
+Slide 16 shape 2113713421: text height 66.16504, box 61.2
+Slide 16 shape 2113713425: text height 66.16504, box 61.2
